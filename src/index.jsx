@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Emitter from 'tiny-emitter';
+import { Editor } from '@recogito/recogito-client-core';
 import ImageAnnotator from './ImageAnnotator';
 import {
   Selection,
@@ -73,7 +74,10 @@ export class Annotorious {
         onCancelSelected={this.handleCancelSelected}
         onClickAnnotation={this.handleClickAnnotation}
         onMouseEnterAnnotation={this.handleMouseEnterAnnotation}
-        onMouseLeaveAnnotation={this.handleMouseLeaveAnnotation} />, this._appContainerEl);
+        onMouseLeaveAnnotation={this.handleMouseLeaveAnnotation} 
+        editor={props => 
+          <Editor detachable {...props } />
+        }/>, this._appContainerEl);
   }
 
   /********************/

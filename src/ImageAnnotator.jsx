@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AnnotationLayer from './AnnotationLayer';
-import { Editor } from '@recogito/recogito-client-core';
 
 import './ImageAnnotator.scss';
 
@@ -355,27 +354,30 @@ export default class ImageAnnotator extends Component  {
     });
 
   render() {
-    // The editor should open under normal conditions - annotation was selected, no headless mode
-    const open = this.state.selectedAnnotation && !this.state.editorDisabled;
+    const { editor } = this.props;
 
-    const readOnly = this.state.readOnly || this.state.selectedAnnotation?.readOnly;
+    if (editor) {
+      // The editor should open under normal conditions - annotation was selected, no headless mode
+      const open = this.state.selectedAnnotation && !this.state.editorDisabled;
 
-    return (open && (
-      <Editor
-        detachable
-        wrapperEl={this.props.wrapperEl}
-        annotation={this.state.selectedAnnotation}
-        modifiedTarget={this.state.modifiedTarget}
-        selectedElement={this.state.selectedDOMElement}
-        readOnly={readOnly}
-        allowEmpty={this.props.config.allowEmpty}
-        widgets={this.state.widgets}
-        env={this.props.env}
-        onAnnotationCreated={this.onCreateOrUpdateAnnotation('onAnnotationCreated')}
-        onAnnotationUpdated={this.onCreateOrUpdateAnnotation('onAnnotationUpdated')}
-        onAnnotationDeleted={this.onDeleteAnnotation}
-        onCancel={this.onCancelAnnotation} />
-    ))
+      const readOnly = this.state.readOnly || this.state.selectedAnnotation?.readOnly;
+
+      return (open && editor({
+          wrapperEl: this.props.wrapperEl,
+          annotation: this.state.selectedAnnotation,
+          modifiedTarget: this.state.modifiedTarget,
+          selectedElement: this.state.selectedDOMElement,
+          readOnly: readOnly,
+          allowEmpty: this.props.config.allowEmpty,
+          widgets: this.state.widgets,
+          env: this.props.env,
+          onAnnotationCreated: this.onCreateOrUpdateAnnotation('onAnnotationCreated'),
+          onAnnotationUpdated: this.onCreateOrUpdateAnnotation('onAnnotationUpdated'),
+          onAnnotationDeleted: this.onDeleteAnnotation,
+          onCancel: this.onCancelAnnotation
+        })
+      )
+    }
   }
 
 }
